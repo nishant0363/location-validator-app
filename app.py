@@ -18,7 +18,13 @@ st.markdown("""
 }
 </style>
 """, unsafe_allow_html=True)
-
+st.markdown("""
+<style>
+body {
+    overflow-x: auto;
+}
+</style>
+""", unsafe_allow_html=True)
 
 st.markdown("""
     <style>
