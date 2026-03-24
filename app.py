@@ -9,8 +9,17 @@ from google.oauth2.service_account import Credentials
 st.markdown("""
     <style>
         .block-container {
-            padding-top: 5rem;
-            padding-bottom: 0rem;
+            padding-top: 0rem !important;
+            margin-top: 0rem !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+    <style>
+        header {visibility: hidden;}
+        .block-container {
+            padding-top: 0rem !important;
         }
     </style>
 """, unsafe_allow_html=True)
