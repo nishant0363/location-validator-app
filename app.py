@@ -9,7 +9,7 @@ from google.oauth2.service_account import Credentials
 st.markdown("""
     <style>
         .block-container {
-            padding-top: 1rem;
+            padding-top: 5rem;
             padding-bottom: 0rem;
         }
     </style>
