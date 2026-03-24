@@ -144,7 +144,7 @@ with right:
     def highlight_row(x):
         return ['background-color: yellow' if x.name == idx else '' for _ in x]
 
-    st.dataframe(df.style.apply(highlight_row, axis=1), height=300)
+    st.dataframe(df.style.apply(highlight_row, axis=1), height=200)
 
     st.markdown("---")
 
