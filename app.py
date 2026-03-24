@@ -76,7 +76,7 @@ row = df.loc[idx]
 # -------------------------------
 # LAYOUT
 # -------------------------------
-left, right = st.columns([1, 2])
+left, right = st.columns([1, 3])
 
 # ===============================
 # LEFT PANEL
@@ -153,4 +153,4 @@ with right:
         icon=folium.Icon(color="red")
     ).add_to(m)
 
-    st_folium(m, width=900, height=500, key=f"map_{idx}")
+    st_folium(m, width=1200, height=200, key=f"map_{idx}")
