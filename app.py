@@ -93,7 +93,7 @@ row = df.loc[idx]
 # -------------------------------
 # LAYOUT
 # -------------------------------
-left, right = st.columns([1, 3])
+left, right = st.columns([1, 4])
 
 # ===============================
 # LEFT PANEL
