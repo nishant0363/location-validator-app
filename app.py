@@ -35,6 +35,39 @@ body {
 header {
     visibility: hidden;
 }
+st.markdown("""
+<style>
+
+/* FORCE entire app width (outermost container) */
+section.main > div {
+    min-width: 1200px !important;
+}
+
+/* Also fix root app container */
+div[data-testid="stAppViewContainer"] {
+    min-width: 1200px !important;
+}
+
+/* Prevent column collapse */
+div[data-testid="column"] {
+    flex: 1 1 0% !important;
+    min-width: 600px !important;
+}
+
+/* Allow horizontal scroll */
+body {
+    overflow-x: auto !important;
+}
+
+/* Remove top padding */
+.block-container {
+    padding-top: 0rem !important;
+}
+
+/* Hide header */
+header {
+    visibility: hidden;
+}
 
 </style>
 """, unsafe_allow_html=True)
