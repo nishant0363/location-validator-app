@@ -5,48 +5,39 @@ from streamlit_folium import st_folium
 import gspread
 # from oauth2client.service_account import ServiceAccountCredentials
 from google.oauth2.service_account import Credentials
-st.markdown("""
-    <meta name="viewport" content="width=1200">
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<style>
-@media (max-width: 768px) {
-    .block-container {
-        min-width: 1200px !important;
-    }
-}
-</style>
-""", unsafe_allow_html=True)
-st.markdown("""
-<style>
-body {
-    overflow-x: auto;
-}
-</style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-    <style>
-        .block-container {
-            padding-top: 0rem !important;
-            margin-top: 0rem !important;
-        }
-    </style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-    <style>
-        header {visibility: hidden;}
-        .block-container {
-            padding-top: 0rem !important;
-        }
-    </style>
-""", unsafe_allow_html=True)
-# -------------------------------
-# CONFIG
-# -------------------------------
 st.set_page_config(layout="wide")
+
+st.markdown("""
+<style>
+
+/* Force full app width */
+html, body, [class*="css"]  {
+    min-width: 1200px !important;
+}
+
+/* Main container */
+.block-container {
+    min-width: 1200px !important;
+    padding-top: 0rem !important;
+}
+
+/* Prevent column stacking */
+[data-testid="column"] {
+    min-width: 600px !important;
+}
+
+/* Allow horizontal scroll */
+body {
+    overflow-x: auto !important;
+}
+
+/* Hide header */
+header {
+    visibility: hidden;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 SHEET_NAME = "blr_amenities_data1"   # <-- change this
 
