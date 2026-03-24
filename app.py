@@ -5,6 +5,20 @@ from streamlit_folium import st_folium
 import gspread
 # from oauth2client.service_account import ServiceAccountCredentials
 from google.oauth2.service_account import Credentials
+st.markdown("""
+    <meta name="viewport" content="width=1200">
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<style>
+@media (max-width: 768px) {
+    .block-container {
+        min-width: 1200px !important;
+    }
+}
+</style>
+""", unsafe_allow_html=True)
+
 
 st.markdown("""
     <style>
