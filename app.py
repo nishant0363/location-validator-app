@@ -35,8 +35,6 @@ body {
 header {
     visibility: hidden;
 }
-st.markdown("""
-<style>
 
 /* FORCE entire app width (outermost container) */
 section.main > div {
