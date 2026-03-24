@@ -6,69 +6,20 @@ import gspread
 # from oauth2client.service_account import ServiceAccountCredentials
 from google.oauth2.service_account import Credentials
 st.set_page_config(layout="wide")
+st.markdown("""
+    <style>
+        header {visibility: hidden;}
+    </style>
+""", unsafe_allow_html=True)
 
-# st.markdown("""
-# <style>
-
-# /* Force full app width */
-# html, body, [class*="css"]  {
-#     min-width: 1200px !important;
-# }
-
-# /* Main container */
-# .block-container {
-#     min-width: 1200px !important;
-#     padding-top: 0rem !important;
-# }
-
-# /* Prevent column stacking */
-# [data-testid="column"] {
-#     min-width: 600px !important;
-# }
-
-# /* Allow horizontal scroll */
-# body {
-#     overflow-x: auto !important;
-# }
-
-# /* Hide header */
-# header {
-#     visibility: hidden;
-# }
-
-# /* FORCE entire app width (outermost container) */
-# section.main > div {
-#     min-width: 1200px !important;
-# }
-
-# /* Also fix root app container */
-# div[data-testid="stAppViewContainer"] {
-#     min-width: 1200px !important;
-# }
-
-# /* Prevent column collapse */
-# div[data-testid="column"] {
-#     flex: 1 1 0% !important;
-#     min-width: 600px !important;
-# }
-
-# /* Allow horizontal scroll */
-# body {
-#     overflow-x: auto !important;
-# }
-
-# /* Remove top padding */
-# .block-container {
-#     padding-top: 0rem !important;
-# }
-
-# /* Hide header */
-# header {
-#     visibility: hidden;
-# }
-
-# </style>
-# """, unsafe_allow_html=True)
+st.markdown("""
+    <style>
+        header {visibility: hidden;}
+        .block-container {
+            padding-top: 0rem;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 SHEET_NAME = "blr_amenities_data1"   # <-- change this
 
