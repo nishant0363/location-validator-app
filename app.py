@@ -153,7 +153,7 @@ with right:
 
     st.dataframe(df.style.apply(highlight_row, axis=1), height=200)
 
-    st.markdown("---")
+    # st.markdown("---")
 
     st.subheader("Map")
 
