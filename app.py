@@ -135,43 +135,37 @@ with left:
         st.session_state.current_idx += 1
         st.cache_data.clear()
         st.rerun()
-
-# ===============================
-# RIGHT PANEL
-# ===============================
-with right:
-
-    st.subheader("Dataset View")
-    col1, col2 = st.columns([10, 1])
-
-    with col2:
-        st.download_button(
+        
+    st.download_button(
             "⬇️ Download",
             df.to_csv(index=False),
             file_name="updated_data.csv",
             mime="text/csv"
         )
 
-    with col1:
-        st.subheader("Dataset View")
-        def highlight_row(x):
-            return ['background-color: yellow' if x.name == idx else '' for _ in x]
+# ===============================
+# RIGHT PANEL
+# ===============================
+with right:
+    st.subheader("Dataset View")
+    def highlight_row(x):
+        return ['background-color: yellow' if x.name == idx else '' for _ in x]
 
-        st.dataframe(df.style.apply(highlight_row, axis=1), height=200)
+    st.dataframe(df.style.apply(highlight_row, axis=1), height=200)
 
-        st.markdown("---")
+    st.markdown("---")
 
-        st.subheader("Map")
+    st.subheader("Map")
 
-        lat = row["Latitude"]
-        lon = row["Longitude"]
+    lat = row["Latitude"]
+    lon = row["Longitude"]
 
-        m = folium.Map(location=[lat, lon], zoom_start=16)
+    m = folium.Map(location=[lat, lon], zoom_start=16)
 
-        folium.Marker(
-            [lat, lon],
-            tooltip=row["Property_Name"],
-            icon=folium.Icon(color="red")
-        ).add_to(m)
+    folium.Marker(
+        [lat, lon],
+        tooltip=row["Property_Name"],
+        icon=folium.Icon(color="red")
+    ).add_to(m)
 
-        st_folium(m, width=1200, height=200, key=f"map_{idx}")
+    st_folium(m, width=1200, height=200, key=f"map_{idx}")
