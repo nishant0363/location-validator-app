@@ -113,7 +113,7 @@ with left:
             st.session_state.current_idx += 1
             st.rerun()
 
-    st.markdown("---")
+    # st.markdown("---")
 
     st.subheader(row["Property_Name"])
     st.write(row["Category"])
@@ -168,4 +168,4 @@ with right:
         icon=folium.Icon(color="red")
     ).add_to(m)
 
-    st_folium(m, width=1200, height=200, key=f"map_{idx}")
+    st_folium(m, width=1200, height=300, key=f"map_{idx}")
