@@ -142,25 +142,36 @@ with left:
 with right:
 
     st.subheader("Dataset View")
+    col1, col2 = st.columns([6, 1])
 
-    def highlight_row(x):
-        return ['background-color: yellow' if x.name == idx else '' for _ in x]
+    with col2:
+        st.download_button(
+            "⬇️ Download",
+            df.to_csv(index=False),
+            file_name="updated_data.csv",
+            mime="text/csv"
+        )
 
-    st.dataframe(df.style.apply(highlight_row, axis=1), height=200)
+    with col1:
+        st.subheader("Dataset View")
+        def highlight_row(x):
+            return ['background-color: yellow' if x.name == idx else '' for _ in x]
 
-    st.markdown("---")
+        st.dataframe(df.style.apply(highlight_row, axis=1), height=200)
 
-    st.subheader("Map")
+        st.markdown("---")
 
-    lat = row["Latitude"]
-    lon = row["Longitude"]
+        st.subheader("Map")
 
-    m = folium.Map(location=[lat, lon], zoom_start=16)
+        lat = row["Latitude"]
+        lon = row["Longitude"]
 
-    folium.Marker(
-        [lat, lon],
-        tooltip=row["Property_Name"],
-        icon=folium.Icon(color="red")
-    ).add_to(m)
+        m = folium.Map(location=[lat, lon], zoom_start=16)
 
-    st_folium(m, width=1200, height=200, key=f"map_{idx}")
+        folium.Marker(
+            [lat, lon],
+            tooltip=row["Property_Name"],
+            icon=folium.Icon(color="red")
+        ).add_to(m)
+
+        st_folium(m, width=1200, height=200, key=f"map_{idx}")
