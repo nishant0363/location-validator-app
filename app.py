@@ -142,7 +142,7 @@ with left:
 with right:
 
     st.subheader("Dataset View")
-    col1, col2 = st.columns([6, 1])
+    col1, col2 = st.columns([10, 1])
 
     with col2:
         st.download_button(
