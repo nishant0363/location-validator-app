@@ -115,7 +115,8 @@ with left:
 
     # st.markdown("---")
 
-    st.subheader(row["Property_Name"])
+    st.subheader("Selected Row Data")
+    st.write(row["Property_Name"])
     st.write(row["Category"])
     st.write(row["Micro_Market"])
 
