@@ -135,9 +135,9 @@ with left:
         st.session_state.current_idx += 1
         st.cache_data.clear()
         st.rerun()
-        
+
     st.download_button(
-            "⬇️ Download",
+            "Download Updated CSV",
             df.to_csv(index=False),
             file_name="updated_data.csv",
             mime="text/csv"
