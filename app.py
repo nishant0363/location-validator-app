@@ -21,7 +21,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-SHEET_NAME = "Google API Data inside NM Blr"   # <-- change this
+SHEET_NAME = "Google_API_Data_inside_NM_Blr"   # <-- change this
 
 # -------------------------------
 # GOOGLE SHEETS CONNECTION
@@ -120,7 +120,7 @@ with left:
     st.write(row["Category"])
     st.write(row["Micro_Market"])
 
-    gmap_link = f"https://www.google.com/maps?q={row['Latitude']},{row['Longitude']}"
+    gmap_link = f"https://www.google.com/maps/place/?q=place_id:{row['place_id']}"
     st.markdown(f"[Open in Google Maps]({gmap_link})")
 
     col3, col4 = st.columns(2)
