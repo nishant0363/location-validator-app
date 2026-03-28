@@ -3,9 +3,10 @@ import pandas as pd
 import folium
 from streamlit_folium import st_folium
 import gspread
-# from oauth2client.service_account import ServiceAccountCredentials
 from google.oauth2.service_account import Credentials
+
 st.set_page_config(layout="wide")
+
 st.markdown("""
     <style>
         header {visibility: hidden;}
@@ -21,7 +22,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-SHEET_NAME = "Google_API_Data_inside_NM_Blr"   # <-- change this
+SHEET_NAME = "Google_API_Data_inside_NM_Blr"
 
 # -------------------------------
 # GOOGLE SHEETS CONNECTION
@@ -37,9 +38,6 @@ def connect_gsheet():
         st.secrets["gcp_service_account"],
         scopes=scope
     )
-    # creds = ServiceAccountCredentials.from_json_keyfile_name(
-    #     "credentials.json", scope
-    # )
 
     client = gspread.authorize(creds)
     sheet = client.open(SHEET_NAME).sheet1
@@ -58,20 +56,24 @@ def load_data():
     if "status" not in df.columns:
         df["status"] = ""
 
+    if "screenshot_num" not in df.columns:
+        df["screenshot_num"] = ""
+
     df["status"] = df["status"].fillna("").astype(str).str.strip()
+    df["screenshot_num"] = df["screenshot_num"].fillna("").astype(str).str.strip()
 
     return df
 
 df = load_data()
 
 # -------------------------------
-# UPDATE FUNCTION
+# UPDATE FUNCTIONS
 # -------------------------------
 def update_status(row_idx, value):
-    # +2 because:
-    # row 1 = header
-    # dataframe index starts at 0
     sheet.update_cell(row_idx + 2, df.columns.get_loc("status") + 1, value)
+
+def update_screenshot(row_idx, value):
+    sheet.update_cell(row_idx + 2, df.columns.get_loc("screenshot_num") + 1, value)
 
 # -------------------------------
 # SESSION STATE
@@ -113,8 +115,6 @@ with left:
             st.session_state.current_idx += 1
             st.rerun()
 
-    # st.markdown("---")
-
     st.subheader("Selected Row Data")
     st.write(row["Property_Name"])
     st.write(row["Category"])
@@ -137,24 +137,52 @@ with left:
         st.cache_data.clear()
         st.rerun()
 
+    # -------------------------------
+    # SCREENSHOT SECTION (ADDED)
+    # -------------------------------
+    st.markdown("---")
+    st.subheader("Screenshot")
+
+    current_ss = row.get("screenshot_num", "")
+
+    ss_input = st.text_input(
+        "Enter Screenshot Number",
+        value=current_ss,
+        key=f"ss_{idx}"
+    )
+
+    col5, col6 = st.columns(2)
+
+    if col5.button("💾 Save Screenshot"):
+        update_screenshot(idx, ss_input)
+        st.cache_data.clear()
+        st.rerun()
+
+    if col6.button("➡️ Save & Next"):
+        update_screenshot(idx, ss_input)
+        st.session_state.current_idx += 1
+        st.cache_data.clear()
+        st.rerun()
+
+    # -------------------------------
+
     st.download_button(
-            "Download Updated CSV",
-            df.to_csv(index=False),
-            file_name="updated_data.csv",
-            mime="text/csv"
-        )
+        "Download Updated CSV",
+        df.to_csv(index=False),
+        file_name="updated_data.csv",
+        mime="text/csv"
+    )
 
 # ===============================
 # RIGHT PANEL
 # ===============================
 with right:
     st.subheader("Dataset View")
+
     def highlight_row(x):
         return ['background-color: yellow' if x.name == idx else '' for _ in x]
 
     st.dataframe(df.style.apply(highlight_row, axis=1), height=200)
-
-    # st.markdown("---")
 
     st.subheader("Map")
 
