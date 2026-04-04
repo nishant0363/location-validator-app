@@ -170,9 +170,17 @@ with left:
 
     image_source = None
 
+    # if paste_result.image_data is not None:
+    #     image_source = Image.open(io.BytesIO(paste_result.image_data))
     if paste_result.image_data is not None:
-        image_source = Image.open(io.BytesIO(paste_result.image_data))
-
+        
+        # Case 1: already PIL Image
+        if isinstance(paste_result.image_data, Image.Image):
+            image_source = paste_result.image_data
+        
+        # Case 2: raw bytes
+        else:
+            image_source = Image.open(io.BytesIO(paste_result.image_data))
     elif uploaded_file is not None:
         image_source = Image.open(uploaded_file)
 
