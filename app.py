@@ -166,11 +166,11 @@ with left:
         if image_source.mode in ("RGBA", "P"):
             image_source = image_source.convert("RGB")
 
-        image_source.thumbnail((100, 300))
+        image_source.thumbnail((700, 500))
 
         buffer = io.BytesIO()
         image_source.save(buffer, format="JPEG", quality=60)
-
+        image.save(buffer, format="JPEG", quality=70)
         encoded = base64.b64encode(buffer.getvalue()).decode()
 
         st.image(image_source, caption="Preview", use_container_width=True)
