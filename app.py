@@ -170,7 +170,7 @@ with left:
 
         buffer = io.BytesIO()
         image_source.save(buffer, format="JPEG", quality=60)
-        image.save(buffer, format="JPEG", quality=70)
+        image_source.save(buffer, format="JPEG", quality=70)
         encoded = base64.b64encode(buffer.getvalue()).decode()
 
         st.image(image_source, caption="Preview", use_container_width=True)
