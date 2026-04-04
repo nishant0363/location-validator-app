@@ -166,7 +166,7 @@ with left:
         if image_source.mode in ("RGBA", "P"):
             image_source = image_source.convert("RGB")
 
-        image_source.thumbnail((500, 300))
+        image_source.thumbnail((100, 300))
 
         buffer = io.BytesIO()
         image_source.save(buffer, format="JPEG", quality=60)
