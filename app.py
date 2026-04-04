@@ -4,21 +4,16 @@ import folium
 from streamlit_folium import st_folium
 import gspread
 from google.oauth2.service_account import Credentials
+import base64
+from PIL import Image
+import io
 
 st.set_page_config(layout="wide")
 
 st.markdown("""
     <style>
         header {visibility: hidden;}
-    </style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-    <style>
-        header {visibility: hidden;}
-        .block-container {
-            padding-top: 0rem;
-        }
+        .block-container {padding-top: 0rem;}
     </style>
 """, unsafe_allow_html=True)
 
@@ -138,31 +133,56 @@ with left:
         st.rerun()
 
     # -------------------------------
-    # SCREENSHOT SECTION (ADDED)
+    # SCREENSHOT SECTION (UPDATED)
     # -------------------------------
     st.markdown("---")
-    st.subheader("Screenshot")
+    st.subheader("Screenshot Upload")
 
+    # Show existing screenshot
     current_ss = row.get("screenshot_num", "")
+    if current_ss:
+        try:
+            img_bytes = base64.b64decode(current_ss)
+            st.image(img_bytes, caption="Existing Screenshot", use_container_width=True)
+        except:
+            pass
 
-    ss_input = st.text_input(
-        "Enter Screenshot Number",
-        value=current_ss,
-        key=f"ss_{idx}"
+    uploaded_file = st.file_uploader(
+        "Upload Screenshot",
+        type=["png", "jpg", "jpeg"],
+        key=f"upload_{idx}"
     )
 
-    col5, col6 = st.columns(2)
+    if uploaded_file is not None:
+        image = Image.open(uploaded_file)
 
-    if col5.button("💾 Save Screenshot"):
-        update_screenshot(idx, ss_input)
-        st.cache_data.clear()
-        st.rerun()
+        # Compress image (IMPORTANT)
+        image = image.resize((600, 600))
 
-    if col6.button("➡️ Save & Next"):
-        update_screenshot(idx, ss_input)
-        st.session_state.current_idx += 1
-        st.cache_data.clear()
-        st.rerun()
+        buffer = io.BytesIO()
+        image.save(buffer, format="JPEG", quality=60)
+
+        encoded = base64.b64encode(buffer.getvalue()).decode()
+
+        st.image(image, caption="Preview", use_container_width=True)
+
+        # Safety check
+        if len(encoded) > 45000:
+            st.error("Image too large after compression. Try smaller image.")
+        else:
+            col5, col6 = st.columns(2)
+
+            if col5.button("💾 Save Screenshot"):
+                update_screenshot(idx, encoded)
+                st.success("Saved!")
+                st.cache_data.clear()
+                st.rerun()
+
+            if col6.button("➡️ Save & Next"):
+                update_screenshot(idx, encoded)
+                st.session_state.current_idx += 1
+                st.cache_data.clear()
+                st.rerun()
 
     # -------------------------------
 
