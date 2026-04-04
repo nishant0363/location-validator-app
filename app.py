@@ -7,6 +7,7 @@ from google.oauth2.service_account import Credentials
 import base64
 from PIL import Image
 import io
+from streamlit_paste_button import paste_image_button
 
 st.set_page_config(layout="wide")
 
@@ -120,9 +121,10 @@ with left:
 
     col3, col4 = st.columns(2)
 
+    # ✅ FIX: OK DOES NOT MOVE NEXT
     if col3.button("✅ OK"):
         update_status(idx, "OK")
-        st.session_state.current_idx += 1
+        st.success("Marked OK")
         st.cache_data.clear()
         st.rerun()
 
@@ -133,10 +135,10 @@ with left:
         st.rerun()
 
     # -------------------------------
-    # SCREENSHOT SECTION (UPDATED)
+    # SCREENSHOT SECTION
     # -------------------------------
     st.markdown("---")
-    st.subheader("Screenshot Upload")
+    st.subheader("Screenshot")
 
     # Show existing screenshot
     current_ss = row.get("screenshot_num", "")
@@ -147,36 +149,50 @@ with left:
         except:
             pass
 
+    # ===============================
+    # 📋 PASTE FROM CLIPBOARD (NEW)
+    # ===============================
+    st.markdown("### 📋 Paste Screenshot (Ctrl+V)")
+
+    paste_result = paste_image_button(
+        label="📋 Paste Screenshot",
+        key=f"paste_{idx}"
+    )
+
+    # ===============================
+    # 📁 FILE UPLOAD (fallback)
+    # ===============================
     uploaded_file = st.file_uploader(
         "Upload Screenshot",
         type=["png", "jpg", "jpeg"],
         key=f"upload_{idx}"
     )
 
-    if uploaded_file is not None:
-        image = Image.open(uploaded_file)
+    image_source = None
 
-        # FIX: Convert RGBA → RGB (handles PNG transparency)
-        if image.mode in ("RGBA", "P"):
-            image = image.convert("RGB")
+    if paste_result.image_data is not None:
+        image_source = Image.open(io.BytesIO(paste_result.image_data))
 
-        # Compress image
-        image = image.resize((600, 600))
-        # image = Image.open(uploaded_file)
+    elif uploaded_file is not None:
+        image_source = Image.open(uploaded_file)
 
-        # # Compress image (IMPORTANT)
-        # image = image.resize((600, 600))
+    if image_source is not None:
+
+        # Fix modes
+        if image_source.mode in ("RGBA", "P"):
+            image_source = image_source.convert("RGB")
+
+        image_source.thumbnail((600, 600))
 
         buffer = io.BytesIO()
-        image.save(buffer, format="JPEG", quality=60)
+        image_source.save(buffer, format="JPEG", quality=60)
 
         encoded = base64.b64encode(buffer.getvalue()).decode()
 
-        st.image(image, caption="Preview", use_container_width=True)
+        st.image(image_source, caption="Preview", use_container_width=True)
 
-        # Safety check
         if len(encoded) > 45000:
-            st.error("Image too large after compression. Try smaller image.")
+            st.error("Image too large after compression")
         else:
             col5, col6 = st.columns(2)
 

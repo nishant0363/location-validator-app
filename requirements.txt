@@ -4,3 +4,4 @@ gspread
 oauth2client
 streamlit-folium
 folium
+streamlit-paste-button
