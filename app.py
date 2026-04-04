@@ -156,8 +156,16 @@ with left:
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
 
-        # Compress image (IMPORTANT)
+        # FIX: Convert RGBA → RGB (handles PNG transparency)
+        if image.mode in ("RGBA", "P"):
+            image = image.convert("RGB")
+
+        # Compress image
         image = image.resize((600, 600))
+        # image = Image.open(uploaded_file)
+
+        # # Compress image (IMPORTANT)
+        # image = image.resize((600, 600))
 
         buffer = io.BytesIO()
         image.save(buffer, format="JPEG", quality=60)
