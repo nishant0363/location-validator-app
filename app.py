@@ -166,10 +166,10 @@ with left:
         if image_source.mode in ("RGBA", "P"):
             image_source = image_source.convert("RGB")
 
-        image_source.thumbnail((700, 500))
+        image_source.thumbnail((400, 300))
 
         buffer = io.BytesIO()
-        image_source.save(buffer, format="JPEG", quality=60)
+        # image_source.save(buffer, format="JPEG", quality=60)
         image_source.save(buffer, format="JPEG", quality=70)
         encoded = base64.b64encode(buffer.getvalue()).decode()
 
