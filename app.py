@@ -17,7 +17,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-SHEET_NAME = "Google_API_Data_inside_NM_Blr"
+SHEET_NAME = "Google_API_Data_inside_NM"
 
 # -------------------------------
 # GOOGLE SHEETS CONNECTION
