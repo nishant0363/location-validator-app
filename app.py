@@ -87,7 +87,7 @@ row = df.loc[idx]
 left, right = st.columns([2, 4])
 
 # ===============================
-# LEFT PANEL
+# LEFT PANEL (INPUT ONLY)
 # ===============================
 with left:
 
@@ -121,7 +121,6 @@ with left:
 
     col3, col4 = st.columns(2)
 
-    # ✅ FIX: OK DOES NOT MOVE NEXT
     if col3.button("✅ OK"):
         update_status(idx, "OK")
         st.success("Marked OK")
@@ -135,33 +134,16 @@ with left:
         st.rerun()
 
     # -------------------------------
-    # SCREENSHOT SECTION
+    # 📋 INPUT SECTION (LEFT)
     # -------------------------------
     st.markdown("---")
-    st.subheader("Screenshot")
-
-    # Show existing screenshot
-    current_ss = row.get("screenshot_num", "")
-    if current_ss:
-        try:
-            img_bytes = base64.b64decode(current_ss)
-            st.image(img_bytes, caption="Existing Screenshot", use_container_width=True)
-        except:
-            pass
-
-    # ===============================
-    # 📋 PASTE FROM CLIPBOARD (NEW)
-    # ===============================
-    st.markdown("### 📋 Paste Screenshot (Ctrl+V)")
+    st.subheader("Upload / Paste Screenshot")
 
     paste_result = paste_image_button(
-        label="📋 Paste Screenshot",
+        label="📋 Paste Screenshot (Ctrl+V)",
         key=f"paste_{idx}"
     )
 
-    # ===============================
-    # 📁 FILE UPLOAD (fallback)
-    # ===============================
     uploaded_file = st.file_uploader(
         "Upload Screenshot",
         type=["png", "jpg", "jpeg"],
@@ -170,27 +152,21 @@ with left:
 
     image_source = None
 
-    # if paste_result.image_data is not None:
-    #     image_source = Image.open(io.BytesIO(paste_result.image_data))
     if paste_result.image_data is not None:
-        
-        # Case 1: already PIL Image
         if isinstance(paste_result.image_data, Image.Image):
             image_source = paste_result.image_data
-        
-        # Case 2: raw bytes
         else:
             image_source = Image.open(io.BytesIO(paste_result.image_data))
+
     elif uploaded_file is not None:
         image_source = Image.open(uploaded_file)
 
     if image_source is not None:
 
-        # Fix modes
         if image_source.mode in ("RGBA", "P"):
             image_source = image_source.convert("RGB")
 
-        image_source.thumbnail((500, 200))
+        image_source.thumbnail((500, 300))
 
         buffer = io.BytesIO()
         image_source.save(buffer, format="JPEG", quality=60)
@@ -216,8 +192,6 @@ with left:
                 st.cache_data.clear()
                 st.rerun()
 
-    # -------------------------------
-
     st.download_button(
         "Download Updated CSV",
         df.to_csv(index=False),
@@ -226,7 +200,7 @@ with left:
     )
 
 # ===============================
-# RIGHT PANEL
+# RIGHT PANEL (VIEW ONLY)
 # ===============================
 with right:
     st.subheader("Dataset View")
@@ -250,3 +224,19 @@ with right:
     ).add_to(m)
 
     st_folium(m, width=1500, height=300, key=f"map_{idx}")
+
+    # -------------------------------
+    # 👁️ VIEW ONLY SCREENSHOT
+    # -------------------------------
+    st.markdown("---")
+    st.subheader("Screenshot View")
+
+    current_ss = row.get("screenshot_num", "")
+    if current_ss:
+        try:
+            img_bytes = base64.b64decode(current_ss)
+            st.image(img_bytes, caption="Saved Screenshot", use_container_width=True)
+        except:
+            st.warning("Unable to display screenshot")
+    else:
+        st.info("No screenshot uploaded yet")
